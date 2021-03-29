@@ -55,10 +55,10 @@ public class HomeController {
         String[] allFiles   = fileService.getAllFiles(userID);
         boolean duplicate   = fileService.isDuplicate(file.getOriginalFilename(), userID);
         model.addAttribute("duplicate", duplicate);
-        if (!duplicate) {
+        if (!duplicate && !file.isEmpty()) {
             fileService.addFile(file, username);
+            model.addAttribute("files", fileService.getAllFiles(userID));
         }
-        model.addAttribute("files", fileService.getAllFiles(userID));
         return "home";
     }
 
