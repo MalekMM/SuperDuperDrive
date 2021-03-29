@@ -7,9 +7,9 @@ public class Files {
     private String contentType;
     private String fileSize;
     private Integer userID;
-    private Byte[] fileData;
+    private byte[] fileData;
 
-    public Files(Integer fileID, String fileName, String contentType, String fileSize, Integer userID, Byte[] fileData) {
+    public Files(Integer fileID, String fileName, String contentType, String fileSize, Integer userID, byte[] fileData) {
         this.fileID = fileID;
         this.fileName = fileName;
         this.contentType = contentType;
@@ -38,7 +38,7 @@ public class Files {
         return userID;
     }
 
-    public Byte[] getFileData() {
+    public byte[] getFileData() {
         return fileData;
     }
 
@@ -62,7 +62,7 @@ public class Files {
         this.userID = userID;
     }
 
-    public void setFileData(Byte[] fileData) {
+    public void setFileData(byte[] fileData) {
         this.fileData = fileData;
     }
 }
