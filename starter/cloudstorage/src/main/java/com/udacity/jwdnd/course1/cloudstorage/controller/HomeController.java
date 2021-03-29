@@ -4,13 +4,11 @@ import com.udacity.jwdnd.course1.cloudstorage.model.FileForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Users;
 import com.udacity.jwdnd.course1.cloudstorage.service.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -63,4 +61,25 @@ public class HomeController {
         model.addAttribute("files", fileService.getAllFiles(userID));
         return "home";
     }
+
+    @GetMapping(
+            value = "/get-file/{fileName}",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
+    @ResponseBody
+    byte[] getFile(@PathVariable String fileName) {
+        return fileService.getFile(fileName).getFileData();
+    }
+
+
+
+    @GetMapping("/delete-file/{fileName}")
+    public String deleteFile(Authentication authentication, @PathVariable String fileName,
+                             @ModelAttribute("fileForm") FileForm fileForm,  Model model){
+        fileService.delete(fileName);
+        model.addAttribute("files", fileService.getAllFiles(getUserID(authentication)));
+        return "home";
+    }
+
+
 }
