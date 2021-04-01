@@ -1,9 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.FileForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.Users;
+import com.udacity.jwdnd.course1.cloudstorage.model.*;
 import com.udacity.jwdnd.course1.cloudstorage.service.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -51,9 +48,14 @@ public class NotesController {
                                       CredentialForm credentialForm,  Model model){
         String noteTitle = noteForm.getNoteTitle();
         String noteDescription = noteForm.getNoteDescription();
+        Integer noteID   =  noteForm.getNoteID();
         Integer userID  = getUserID(authentication);
-        noteService.insertNote(noteTitle, noteDescription, userID);
-        //model.addAttribute("notes", noteService.getAllNotes(userID));
+        if (noteID == null){
+            noteService.insertNote(noteTitle, noteDescription, userID);
+        } else {
+            noteService.updateNote(noteID, noteTitle, noteDescription);
+        }
+        model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("result", "success");
         return "tmp";
     }
