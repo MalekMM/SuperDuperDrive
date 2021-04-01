@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Controller
-@RequestMapping(value = {"/home", ""})
+@RequestMapping(value = {"/home"})
 public class HomeController {
 
     private final UserService userService;
@@ -53,7 +53,6 @@ public class HomeController {
         model.addAttribute("files", fileService.getAllFiles(userID));
         model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("credentials", credentialService.getAllCredentials(userID));
-
         return "home";
     }
 
@@ -83,7 +82,6 @@ public class HomeController {
     }
 
 
-
     @GetMapping("/delete-file/{fileName}")
     public String deleteFile(Authentication authentication, @PathVariable String fileName,
                              @ModelAttribute("fileForm") FileForm fileForm,  Model model){
@@ -91,6 +89,5 @@ public class HomeController {
         model.addAttribute("files", fileService.getAllFiles(getUserID(authentication)));
         return "home";
     }
-
 
 }

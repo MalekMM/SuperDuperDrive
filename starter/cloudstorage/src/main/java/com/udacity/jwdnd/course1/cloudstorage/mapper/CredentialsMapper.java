@@ -27,8 +27,8 @@ public interface CredentialsMapper {
 
     // Update a credential
     @Update("UPDATE CREDENTIALS SET url = #{url}, key = #{key}," +
-            "password = #{password}, username = #{newUserName} WHERE credentialid = #{credentialID}")
-    void updateCredential(Integer credentialID, String newUserName, String url, String key, String password);
+            "password = #{password}, username = #{userName} WHERE credentialid = #{credentialID}")
+    void updateCredential(Integer credentialID, String userName, String url, String key, String password);
 
 
 
