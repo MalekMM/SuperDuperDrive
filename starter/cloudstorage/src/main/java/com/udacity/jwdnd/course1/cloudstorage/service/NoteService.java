@@ -28,8 +28,8 @@ public class NoteService {
         notesMapper.insertNote(note);
     }
 
-    public void deleteNote(String noteTitle){
-        notesMapper.deleteNote(noteTitle);
+    public void deleteNote(Integer noteID){
+        notesMapper.deleteNote(noteID);
     }
 
     public void updateNote(Integer noteID, String noteTitle, String noteDescription){

@@ -22,8 +22,8 @@ public interface NotesMapper {
     int insertNote(Notes note);
 
     // Delete a note from the DB
-    @Delete("DELETE FROM NOTES WHERE notetitle = #{noteTitle}")
-    void deleteNote(String noteTitle);
+    @Delete("DELETE FROM NOTES WHERE noteid = #{noteID}")
+    void deleteNote(Integer noteID);
 
     // Update a note
     @Update("UPDATE NOTES SET notetitle = #{title}, notedescription = #{description} WHERE noteid = #{noteID}")
