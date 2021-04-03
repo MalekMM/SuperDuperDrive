@@ -61,21 +61,24 @@ public class HomeController {
     @PostMapping
     public String uploadFile(Authentication authentication, @ModelAttribute("fileForm") FileForm fileForm,
                              Model model) throws IOException {
-        Integer userID  = getUserID(authentication);
-        MultipartFile file  = fileForm.getFile();
-        if (!file.isEmpty()) {
-            boolean duplicate = fileService.isDuplicate(file.getOriginalFilename(), userID);
-            model.addAttribute("duplicate", duplicate);
-            if (!duplicate && !file.isEmpty()) {
+        try {
+            Integer userID = getUserID(authentication);
+            MultipartFile file = fileForm.getFile();
+            if (file.isEmpty()) {
+                model.addAttribute("message", "Cannot upload an empty file.\n");
+                model.addAttribute("result", "error");
+            } else if (fileService.isDuplicate(file.getOriginalFilename(), userID)) {
+                model.addAttribute("message", "The file has already been uploaded.");
+                model.addAttribute("result", "error");
+            } else {
                 fileService.addFile(file, getUserName(authentication));
                 model.addAttribute("result", "success");
-            } else {
-                model.addAttribute("result", "error");
             }
-        } else {
+            model.addAttribute("files", fileService.getAllFiles(userID));
+        } catch (Exception e) {
+            model.addAttribute("message", "Something went wrong.");
             model.addAttribute("result", "error");
         }
-        model.addAttribute("files", fileService.getAllFiles(userID));
         return "result";
     }
 

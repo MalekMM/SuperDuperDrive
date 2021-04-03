@@ -55,6 +55,7 @@ public class NotesController {
             noteService.deleteNote(intNoteID);
             model.addAttribute("result", "success");
         } catch (Exception e) {
+            model.addAttribute("message", "Something went wrong!");
             model.addAttribute("result", "error");
         }
         return "result";

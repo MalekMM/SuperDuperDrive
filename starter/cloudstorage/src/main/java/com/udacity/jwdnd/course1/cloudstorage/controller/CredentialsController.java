@@ -75,6 +75,7 @@ public class CredentialsController {
             credentialService.deleteCredential(credentialID);
             model.addAttribute("result", "success");
         } catch (Exception e){
+            model.addAttribute("message", "Something went wrong!");
             model.addAttribute("result", "error");
         }
         return "result";
