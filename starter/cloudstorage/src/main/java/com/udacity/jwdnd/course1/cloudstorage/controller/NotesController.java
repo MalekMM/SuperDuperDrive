@@ -44,16 +44,20 @@ public class NotesController {
         }
         model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("result", "success");
-        return "tmp";
+        return "result";
     }
 
     @GetMapping("/delete-note/{noteID}")
     public String deleteNote(Authentication authentication, @PathVariable String noteID,
                            @ModelAttribute("noteForm") NoteForm noteForm, Model model) {
-        Integer intNoteID   = Integer.valueOf(noteID);
-        noteService.deleteNote(intNoteID);
-        model.addAttribute("result", "success");
-        return "tmp";
+        try {
+            Integer intNoteID   = Integer.valueOf(noteID);
+            noteService.deleteNote(intNoteID);
+            model.addAttribute("result", "success");
+        } catch (Exception e) {
+            model.addAttribute("result", "error");
+        }
+        return "result";
     }
 
 }

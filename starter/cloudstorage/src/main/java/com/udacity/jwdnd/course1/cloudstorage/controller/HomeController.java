@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping(value = {"/home"})
@@ -53,6 +54,7 @@ public class HomeController {
         model.addAttribute("files", fileService.getAllFiles(userID));
         model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("credentials", credentialService.getAllCredentials(userID));
+        model.addAttribute("encryptionService", encryptionService);
         return "home";
     }
 
@@ -60,16 +62,21 @@ public class HomeController {
     public String uploadFile(Authentication authentication, @ModelAttribute("fileForm") FileForm fileForm,
                              Model model) throws IOException {
         Integer userID  = getUserID(authentication);
-        String username = getUserName(authentication);
         MultipartFile file  = fileForm.getFile();
-        String[] allFiles   = fileService.getAllFiles(userID);
-        boolean duplicate   = fileService.isDuplicate(file.getOriginalFilename(), userID);
-        model.addAttribute("duplicate", duplicate);
-        if (!duplicate && !file.isEmpty()) {
-            fileService.addFile(file, username);
+        if (!file.isEmpty()) {
+            boolean duplicate = fileService.isDuplicate(file.getOriginalFilename(), userID);
+            model.addAttribute("duplicate", duplicate);
+            if (!duplicate && !file.isEmpty()) {
+                fileService.addFile(file, getUserName(authentication));
+                model.addAttribute("result", "success");
+            } else {
+                model.addAttribute("result", "error");
+            }
+        } else {
+            model.addAttribute("result", "error");
         }
         model.addAttribute("files", fileService.getAllFiles(userID));
-        return "home";
+        return "result";
     }
 
     @GetMapping(
@@ -86,8 +93,14 @@ public class HomeController {
     public String deleteFile(Authentication authentication, @PathVariable String fileName,
                              @ModelAttribute("fileForm") FileForm fileForm,  Model model){
         fileService.delete(fileName);
-        model.addAttribute("files", fileService.getAllFiles(getUserID(authentication)));
-        return "home";
+        String[] files = fileService.getAllFiles(getUserID(authentication));
+        model.addAttribute("files", files);
+        if (Arrays.asList(files).contains(fileName)) {
+            model.addAttribute("result", "notSaved");
+        } else {
+            model.addAttribute("result", "success");
+        }
+        return "result";
     }
 
 }

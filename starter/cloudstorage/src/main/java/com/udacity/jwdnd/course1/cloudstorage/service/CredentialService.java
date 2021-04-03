@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.service;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialsMapper;
-import com.udacity.jwdnd.course1.cloudstorage.mapper.UsersMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import org.springframework.stereotype.Service;
 
@@ -10,18 +9,16 @@ import org.springframework.stereotype.Service;
 public class CredentialService {
 
     private final CredentialsMapper credentialsMapper;
-    private final UsersMapper usersMapper;
 
-    public CredentialService(CredentialsMapper credentialsMapper, UsersMapper usersMapper) {
+    public CredentialService(CredentialsMapper credentialsMapper) {
         this.credentialsMapper = credentialsMapper;
-        this.usersMapper = usersMapper;
     }
 
-    public Credentials getCredential(Integer userID) {
-        return credentialsMapper.getCredential(userID);
+    public Credentials getCredential(Integer credntialID) {
+        return credentialsMapper.getCredential(credntialID);
     }
 
-    public String[] getAllCredentials(Integer userID) {
+    public Credentials[] getAllCredentials(Integer userID) {
         return credentialsMapper.getAllCredentialsForUserID(userID);
     }
 

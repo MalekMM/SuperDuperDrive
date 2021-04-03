@@ -4,11 +4,12 @@ public class Credentials {
     private Integer credentialID;
     private String url;
     private String username;
-    private String key;
-    private String password;
+    private String key; // encoded
+    private String password; // encoded
     private Integer userID;
 
-    public Credentials(Integer credentialID, String url, String username, String key, String password, Integer userID) {
+    public Credentials(Integer credentialID, String url, String username,
+                       String key, String password, Integer userID) {
         this.credentialID = credentialID;
         this.url = url;
         this.username = username;
