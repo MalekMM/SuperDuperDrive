@@ -12,18 +12,18 @@ public interface NotesMapper {
     Notes getNote(Integer noteID);
 
     // Select all notes for a specific user
-    @Select("SELECT notetitle FROM NOTES WHERE userid = #{userID}")
-    String[] getAllNotesForUserID(Integer userID);
+    @Select("SELECT * FROM NOTES WHERE userid = #{userID}")
+    Notes[] getAllNotesForUserID(Integer userID);
 
     // Add a new note to the DB
-    @Insert("INSERT INTO NOTES (notetitle, notedescription, userid)" +
+    @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) " +
             "VALUES (#{noteTitle}, #{noteDescription}, #{userID})")
     @Options(useGeneratedKeys = true, keyProperty = "noteID")
     int insertNote(Notes note);
 
     // Delete a note from the DB
-    @Delete("DELETE FROM NOTES WHERE notetitle = #{noteTitle}")
-    void deleteNote(String noteTitle);
+    @Delete("DELETE FROM NOTES WHERE noteid = #{noteID}")
+    void deleteNote(Integer noteID);
 
     // Update a note
     @Update("UPDATE NOTES SET notetitle = #{title}, notedescription = #{description} WHERE noteid = #{noteID}")

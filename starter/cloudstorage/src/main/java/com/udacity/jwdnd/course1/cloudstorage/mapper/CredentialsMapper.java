@@ -12,8 +12,8 @@ public interface CredentialsMapper {
     Credentials getCredential(Integer credentialID);
 
     // Select all credentials for a user
-    @Select("SELECT url FROM CREDENTIALS WHERE userid = #{userID}")
-    String[] getAllCredentialsForUserID(Integer userID);
+    @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userID}")
+    Credentials[] getAllCredentialsForUserID(Integer userID);
 
     // Add a credential to DB
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid)" +
@@ -27,8 +27,8 @@ public interface CredentialsMapper {
 
     // Update a credential
     @Update("UPDATE CREDENTIALS SET url = #{url}, key = #{key}," +
-            "password = #{password}, username = #{newUserName} WHERE credentialid = #{credentialID}")
-    void updateCredential(Integer credentialID, String newUserName, String url, String key, String password);
+            "password = #{password}, username = #{userName} WHERE credentialid = #{credentialID}")
+    void updateCredential(Integer credentialID, String userName, String url, String key, String password);
 
 
 

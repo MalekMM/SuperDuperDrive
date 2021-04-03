@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
-@RequestMapping(value = {"/home", ""})
+@RequestMapping(value = {"/home"})
 public class HomeController {
 
     private final UserService userService;
@@ -53,24 +54,32 @@ public class HomeController {
         model.addAttribute("files", fileService.getAllFiles(userID));
         model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("credentials", credentialService.getAllCredentials(userID));
-
+        model.addAttribute("encryptionService", encryptionService);
         return "home";
     }
 
     @PostMapping
     public String uploadFile(Authentication authentication, @ModelAttribute("fileForm") FileForm fileForm,
                              Model model) throws IOException {
-        Integer userID  = getUserID(authentication);
-        String username = getUserName(authentication);
-        MultipartFile file  = fileForm.getFile();
-        String[] allFiles   = fileService.getAllFiles(userID);
-        boolean duplicate   = fileService.isDuplicate(file.getOriginalFilename(), userID);
-        model.addAttribute("duplicate", duplicate);
-        if (!duplicate && !file.isEmpty()) {
-            fileService.addFile(file, username);
+        try {
+            Integer userID = getUserID(authentication);
+            MultipartFile file = fileForm.getFile();
+            if (file.isEmpty()) {
+                model.addAttribute("message", "Cannot upload an empty file.\n");
+                model.addAttribute("result", "error");
+            } else if (fileService.isDuplicate(file.getOriginalFilename(), userID)) {
+                model.addAttribute("message", "The file has already been uploaded.");
+                model.addAttribute("result", "error");
+            } else {
+                fileService.addFile(file, getUserName(authentication));
+                model.addAttribute("result", "success");
+            }
+            model.addAttribute("files", fileService.getAllFiles(userID));
+        } catch (Exception e) {
+            model.addAttribute("message", "Something went wrong.");
+            model.addAttribute("result", "error");
         }
-        model.addAttribute("files", fileService.getAllFiles(userID));
-        return "home";
+        return "result";
     }
 
     @GetMapping(
@@ -83,14 +92,18 @@ public class HomeController {
     }
 
 
-
     @GetMapping("/delete-file/{fileName}")
     public String deleteFile(Authentication authentication, @PathVariable String fileName,
                              @ModelAttribute("fileForm") FileForm fileForm,  Model model){
         fileService.delete(fileName);
-        model.addAttribute("files", fileService.getAllFiles(getUserID(authentication)));
-        return "home";
+        String[] files = fileService.getAllFiles(getUserID(authentication));
+        model.addAttribute("files", files);
+        if (Arrays.asList(files).contains(fileName)) {
+            model.addAttribute("result", "notSaved");
+        } else {
+            model.addAttribute("result", "success");
+        }
+        return "result";
     }
-
 
 }
