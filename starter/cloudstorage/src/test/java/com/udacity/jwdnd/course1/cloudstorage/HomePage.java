@@ -8,6 +8,8 @@ import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
 
+    private final WebDriver webDriver;
+
     @FindBy(id = "logout-button")
     private WebElement logoutButton;
 
@@ -23,14 +25,16 @@ public class HomePage {
 
     public HomePage(WebDriver webDriver) {
         PageFactory.initElements(webDriver, this);
+        this.webDriver = webDriver;
     }
 
     public void logout() {
         logoutButton.click();
     }
 
-    public WebElement getNotesTab() {
-        return notesTab;
+    public void goToNotesTab() {
+        JavascriptExecutor jse = (JavascriptExecutor) webDriver;
+        jse.executeScript("arguments[0].click()", notesTab);
     }
 
 //    private void clickByXPath(String xpath) {
