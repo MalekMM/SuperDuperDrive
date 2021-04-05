@@ -247,18 +247,24 @@ class CloudStorageApplicationTests {
 //		addCredential();
 		navigateTo("/home");
 		homePage.goToCredentialsTab();
-
+		// Tests before changes
+		Credentials credential = credentialService.getCredential(credID);
+		String encryptedPassword = encryptionService.encryptValue(credPassword, credential.getKey());
+		Assertions.assertEquals(encryptedPassword, credentialPage.getCredPassword());
+		Assertions.assertEquals(credPassword, encryptionService.decryptValue(credentialPage.getCredPassword(), credential.getKey()));
+		Assertions.assertEquals(url, credentialPage.getCredUrl());
+		Assertions.assertEquals(credUsername, credentialPage.getCredUsername());
+		// update credential
 		credentialPage.editCredential(newUrl, newCredUsername, newCredPassword);
 		Assertions.assertTrue(resultPage.resultClick());
 		homePage.goToCredentialsTab();
-
-		Assertions.assertEquals(newUrl, credentialPage.getCredUrl());
-		Assertions.assertEquals(newCredUsername, credentialPage.getCredUsername());
-
-		Credentials credential = credentialService.getCredential(credID);
-		String encryptedPassword = encryptionService.encryptValue(newCredPassword, credential.getKey());
+		// Tests after changes
+		credential = credentialService.getCredential(credID);
+		encryptedPassword = encryptionService.encryptValue(newCredPassword, credential.getKey());
 		Assertions.assertEquals(encryptedPassword, credentialPage.getCredPassword());
 		Assertions.assertEquals(newCredPassword, encryptionService.decryptValue(credentialPage.getCredPassword(), credential.getKey()));
+		Assertions.assertEquals(newUrl, credentialPage.getCredUrl());
+		Assertions.assertEquals(newCredUsername, credentialPage.getCredUsername());
 	}
 
 	@Test
