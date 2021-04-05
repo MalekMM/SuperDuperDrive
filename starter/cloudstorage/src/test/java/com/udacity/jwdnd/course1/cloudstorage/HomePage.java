@@ -17,8 +17,12 @@ public class HomePage {
     @FindBy(id = "nav-notes-tab")
     private WebElement notesTab;
 
-    @FindBy(xpath = "//a[@href='#nav-files']")
-    private WebElement filesTab;
+    @FindBy(id = "fileUpload")
+    private WebElement selectFile;
+
+//    @FindBy(xpath = "//a[@href='#nav-files']")
+//    @FindBy(id = "nav-files-tab")
+//    private WebElement filesTab;
 
     @FindBy(xpath = "//a[@href='#nav-credentials']")
     private WebElement credentialsTab;
@@ -34,12 +38,12 @@ public class HomePage {
 
     public void goToNotesTab() {
         JavascriptExecutor jse = (JavascriptExecutor) webDriver;
-        jse.executeScript("arguments[0].click()", notesTab);
+        jse.executeScript("arguments[0].click();", notesTab);
     }
 
-//    private void clickByXPath(String xpath) {
-//        WebElement notes = driver.findElement(By.xpath(xpath));
-//        this.jse.executeScript("arguments[0].click()", notes);
-//    }
+    public void goToCredentialsTab() {
+        JavascriptExecutor jse = (JavascriptExecutor) webDriver;
+        jse.executeScript("arguments[0].click();", credentialsTab);
+    }
 
 }
