@@ -44,7 +44,6 @@ public class NotesController {
         }
         model.addAttribute("notes", noteService.getAllNotes(userID));
         model.addAttribute("result", "success");
-        model.addAttribute("activeTab", "notes");
         return "result";
     }
 
@@ -59,7 +58,6 @@ public class NotesController {
             model.addAttribute("message", "Something went wrong!");
             model.addAttribute("result", "error");
         }
-        model.addAttribute("activeTab", "notes");
         return "result";
     }
 
