@@ -28,7 +28,7 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                <form action="#" th:action="@{'/home'}" th:object="${fileForm}" enctype="multipart/form-data"
+                <form action="#" th:action="@{'/files'}" th:object="${fileForm}" enctype="multipart/form-data"
                       method="POST">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
@@ -57,9 +57,9 @@
                         <tr th:each="file : ${files}">
                             <td>
                                 <a target="_blank" class="btn btn-success"
-                                   th:href="@{/home/get-file/{file}(file = ${file})}">View</a>
+                                   th:href="@{/files/get-file/{file}(file = ${file})}">View</a>
                                 <a class="btn btn-danger"
-                                   th:href="@{/home/delete-file/{file}(file = ${file})}">Delete</a>
+                                   th:href="@{/files/delete-file/{file}(file = ${file})}">Delete</a>
                             </td>
                             <th scope="row" th:text="${file}">ExampleFile.txt</th>
                         </tr>

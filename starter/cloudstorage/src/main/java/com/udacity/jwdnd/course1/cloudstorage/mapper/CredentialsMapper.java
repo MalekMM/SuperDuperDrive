@@ -15,6 +15,10 @@ public interface CredentialsMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userID}")
     Credentials[] getAllCredentialsForUserID(Integer userID);
 
+    // Select all credential usernames for a user
+    @Select("SELECT username FROM CREDENTIALS WHERE userid = #{userID}")
+    String[] getAllCredentialUsernamesForUserID(Integer userID);
+
     // Add a credential to DB
     @Insert("INSERT INTO CREDENTIALS (url, username, key, password, userid)" +
             "VALUES (#{url}, #{username}, #{key}, #{password}, #{userID})")

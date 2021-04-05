@@ -20,7 +20,8 @@
                     You successfully signed up! In a moment you will be redirected to the <a id="login-link" th:href="@{/login}">login</a> page.
                     <meta http-equiv="refresh" content="5; URL=/login" />
                 </div>
-                <div id="error-msg" th:if="${signupError}" class="alert alert-danger">
+                <div id="error-msg" th:if="${signupError}" th:text="${signupErrorMessage}" class="alert alert-danger">Something went wrong. Please check your information
+                    and enter your information again.
                     <span>${signupError}</span>
                 </div>
                 <div class="form-row">

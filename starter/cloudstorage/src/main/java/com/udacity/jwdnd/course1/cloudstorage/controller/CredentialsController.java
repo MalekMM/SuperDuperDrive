@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Controller
@@ -56,15 +55,18 @@ public class CredentialsController {
         String encodedKey = Base64.getEncoder().encodeToString(key);
         String encryptedPassword = encryptionService.encryptValue(credPassword, encodedKey);
 
-        if (credID == null) {
+        if (credentialService.isDuplicate(credUsername, userID)){
+            model.addAttribute("result", "error");
+            model.addAttribute("message", Messages.duplicateCredMessage);
+        } else if (credID == null) {
             credentialService.insertCredential(credUrl, credUsername, encodedKey, encryptedPassword, userID);
+            model.addAttribute("result", "success");
         } else {
             credentialService.updateCredential(credID, credUrl, encodedKey, encryptedPassword, credUsername);
+            model.addAttribute("result", "success");
         }
         model.addAttribute("credentials", credentialService.getAllCredentials(userID));
         model.addAttribute("encryptionService", encryptionService);
-        model.addAttribute("result", "success");
-
         return "result";
     }
 
@@ -75,7 +77,7 @@ public class CredentialsController {
             credentialService.deleteCredential(credentialID);
             model.addAttribute("result", "success");
         } catch (Exception e){
-            model.addAttribute("message", "Something went wrong!");
+            model.addAttribute("message", Messages.errorMessage);
             model.addAttribute("result", "error");
         }
         return "result";

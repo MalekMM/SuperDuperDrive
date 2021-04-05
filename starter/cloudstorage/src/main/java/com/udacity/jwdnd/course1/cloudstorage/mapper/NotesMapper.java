@@ -15,6 +15,10 @@ public interface NotesMapper {
     @Select("SELECT * FROM NOTES WHERE userid = #{userID}")
     Notes[] getAllNotesForUserID(Integer userID);
 
+    // Select all note titles for a specific user
+    @Select("SELECT notetitle FROM NOTES WHERE userid = #{userID}")
+    String[] getAllNoteTitleForUserID(Integer userID);
+
     // Add a new note to the DB
     @Insert("INSERT INTO NOTES (notetitle, notedescription, userid) " +
             "VALUES (#{noteTitle}, #{noteDescription}, #{userID})")

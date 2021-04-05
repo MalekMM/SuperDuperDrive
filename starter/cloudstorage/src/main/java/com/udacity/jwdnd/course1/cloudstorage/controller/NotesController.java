@@ -37,13 +37,20 @@ public class NotesController {
         String noteDescription = noteForm.getNoteDescription();
         Integer noteID   =  noteForm.getNoteID();
         Integer userID  = getUserID(authentication);
-        if (noteID == null){
+        if (noteTitle.length()>20 || noteDescription.length()>1000){
+            model.addAttribute("result", "error");
+            model.addAttribute("message", Messages.notesLengthExceeded);
+        } else if (noteService.isDuplicate(noteTitle, userID)) {
+            model.addAttribute("result", "error");
+            model.addAttribute("message", Messages.duplicateNotesMessage);
+        } else if (noteID == null) {
             noteService.insertNote(noteTitle, noteDescription, userID);
+            model.addAttribute("result", "success");
         } else {
             noteService.updateNote(noteID, noteTitle, noteDescription);
+            model.addAttribute("result", "success");
         }
         model.addAttribute("notes", noteService.getAllNotes(userID));
-        model.addAttribute("result", "success");
         return "result";
     }
 
@@ -55,7 +62,7 @@ public class NotesController {
             noteService.deleteNote(intNoteID);
             model.addAttribute("result", "success");
         } catch (Exception e) {
-            model.addAttribute("message", "Something went wrong!");
+            model.addAttribute("message", Messages.errorMessage);
             model.addAttribute("result", "error");
         }
         return "result";

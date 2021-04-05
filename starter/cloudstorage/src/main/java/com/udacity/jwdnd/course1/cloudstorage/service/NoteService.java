@@ -1,18 +1,17 @@
 package com.udacity.jwdnd.course1.cloudstorage.service;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NotesMapper;
-import com.udacity.jwdnd.course1.cloudstorage.mapper.UsersMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 public class NoteService {
     private final NotesMapper notesMapper;
-    private final UsersMapper usersMapper;
 
-    public NoteService(NotesMapper notesMapper, UsersMapper usersMapper) {
+    public NoteService(NotesMapper notesMapper) {
         this.notesMapper = notesMapper;
-        this.usersMapper = usersMapper;
     }
 
     public Notes getNote(Integer noteID) {
@@ -34,5 +33,10 @@ public class NoteService {
 
     public void updateNote(Integer noteID, String noteTitle, String noteDescription){
         notesMapper.updateNote(noteID, noteTitle, noteDescription);
+    }
+
+    public boolean isDuplicate(String noteTitle, Integer userID) {
+        String[] allNoteTitles = notesMapper.getAllNoteTitleForUserID(userID);
+        return Arrays.asList(allNoteTitles).contains(noteTitle);
     }
 }

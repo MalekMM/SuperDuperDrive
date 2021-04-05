@@ -4,6 +4,8 @@ import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialsMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 
 @Service
 public class CredentialService {
@@ -36,5 +38,10 @@ public class CredentialService {
     public void updateCredential(Integer credentialID, String url,
                                  String key, String password, String username) {
         credentialsMapper.updateCredential(credentialID, username, url, key, password);
+    }
+
+    public boolean isDuplicate(String username, Integer userID){
+        String[] allUsernames = credentialsMapper.getAllCredentialUsernamesForUserID(userID);
+        return Arrays.asList(allUsernames).contains(username);
     }
 }
